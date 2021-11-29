@@ -17,7 +17,7 @@ def download_html(list,folder,debug=0):
         # print(x['url'])
         for y in range(1,x['page_length']+1):   # load each page url, limit is manually set in varible page length
             url = x['url']+str(y)               # add the page number to the url
-            filename = folder + '\\' + x['filename'] + str(y) + '.html'   # build the filename
+            filename = folder + x['filename'] + str(y) + '.html'   # build the filename
             if os.path.exists(filename) :       # if file already exists then skip it
                 if debug:
                     print(filename,'already exists, skipping')
