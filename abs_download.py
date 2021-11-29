@@ -17,14 +17,15 @@ def download_html(list,folder,debug=0):
         # print(x['url'])
         for y in range(1,x['page_length']+1):   # load each page url, limit is manually set in varible page length
             url = x['url']+str(y)               # add the page number to the url
-            filename = folder + x['filename'] + str(y) + '.html'   # build the filename
-            if os.path.exists(filename) :       # if file already exists then skip it
+            file = x['filename'] + str(y) + '.html'
+            fullpath = folder + file
+            if os.path.exists(fullpath) :       # if file already exists then skip it
                 if debug:
-                    print(filename,'already exists, skipping')
+                    print(file,'already exists', end=', ')
                 continue
             r = requests.get(url, allow_redirects=True) # download the page
-            with open(filename,'wb') as f:
+            with open(fullpath,'wb') as f:
                 f.write(r.content) # save the web page    
             if debug:
-                print(filename,'downloaded')        
+                print(file,'downloaded', end=', ')        
 
