@@ -22,7 +22,7 @@ def read_html(filename,debug=0):
         author = author.replace('By:','').strip()       # strip out characters
         dict['author'] = author
         
-        stars = book.find(string=lambda text: "stars" in text.lower())          # find the field that contains ""
+        stars = book.find(string=lambda text: "out of 5 stars" in text.lower())          # find the field that contains ""
         dict['stars'] = stars.replace('out of 5 stars','')                      # strip chars
         
         rating = book.find(string=lambda text: "ratings" in text.lower())
