@@ -3,23 +3,24 @@ from bs4 import BeautifulSoup
 import pandas as pd
 
 script_folder = os.path.dirname(__file__)
-csvfile = script_folder + '\\books.csv'
 
-def process_folder(folder,debug=0):
+def process_folder(folder,csvfile,debug=0):
     '''process htmls into a csv'''
     if os.path.exists(csvfile) :       # if file already exists then skip it
+        if debug: print('csv already exists')
         return
-    df = read_folder(folder,debug)
-    df.to_csv(csvfile, index=False)
+    df = read_folder(folder,debug)      # process folder of htmls, return a df
+    df.to_csv(csvfile, index=False)     
+    if debug: print('create',csvfile)
 
 
 def read_folder(folder,debug=0):
     '''read through a folder of html files, outputting a dataframe'''
     df = pd.DataFrame([])
-    for file in os.listdir(folder):                    # loop over all downloaded items
-        temp_list = read_html(folder+file)   # read each file, convert it to a list with beautiful soup
-        temp_df = pd.DataFrame(temp_list)                       # list to df
-        df = df.append(temp_df)                     # append the new df to the main df
+    for file in os.listdir(folder):                     # loop over all downloaded items
+        temp_list = read_html(folder+file)              # read each file, convert it to a list with beautiful soup
+        temp_df = pd.DataFrame(temp_list)               # list to df
+        df = df.append(temp_df)                         # append the new df to the main df
     if debug:   
         print(len(df.index),'books processed')
     return df
@@ -39,7 +40,7 @@ def read_html(filename,debug=0):
         author = author.replace('By:','').strip()       # strip out characters
         dict['author'] = author
         
-        stars = book.find(string=lambda text: "out of 5 stars" in text.lower())          # find the field that contains ""
+        stars = book.find(string=lambda text: "out of 5 stars" in text.lower())          # find the field that contains specified characters
         dict['stars'] = stars.replace('out of 5 stars','')                      # strip chars
         
         rating = book.find(string=lambda text: "ratings" in text.lower())
