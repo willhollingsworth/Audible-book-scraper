@@ -56,10 +56,8 @@ def read_html(filename,debug=0):
         dict['full url'] = 'www.audible.com/pd/'+ url
 
         book_list.append(dict)
-    if debug:
+    if debug>1:
         print(len(book_list),'items processed')
-    if debug:
-        print('first book is',book_list[0])
     return book_list
 
 if __name__ == '__main__':
