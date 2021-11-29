@@ -2,8 +2,17 @@ import os
 from bs4 import BeautifulSoup
 import pandas as pd
 
+script_folder = os.path.dirname(__file__)
+csvfile = script_folder + '\\books.csv'
 
-''' file loader  '''
+def process_folder(folder,debug=0):
+    '''process htmls into a csv'''
+    if os.path.exists(csvfile) :       # if file already exists then skip it
+        return
+    df = read_folder(folder,debug)
+    df.to_csv(csvfile, index=False)
+
+
 def read_folder(folder,debug=0):
     '''read through a folder of html files, outputting a dataframe'''
     df = pd.DataFrame([])
