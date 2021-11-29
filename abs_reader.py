@@ -1,11 +1,19 @@
 import os
 from bs4 import BeautifulSoup
+import pandas as pd
 
-html_folder = os.path.dirname(__file__) + '\\downloads\\'
 
 ''' file loader  '''
-test_file = html_folder + 'mt1.html'
-
+def read_folder(folder,debug=0):
+    '''read through a folder of html files, outputting a dataframe'''
+    df = pd.DataFrame([])
+    for file in os.listdir(folder):                    # loop over all downloaded items
+        temp_list = read_html(folder+file)   # read each file, convert it to a list with beautiful soup
+        temp_df = pd.DataFrame(temp_list)                       # list to df
+        df = df.append(temp_df)                     # append the new df to the main df
+    if debug:   
+        print(len(df.index),'books processed')
+    return df
 
 def read_html(filename,debug=0):
     '''audible html file -> book listing as dictionary items in a list'''
