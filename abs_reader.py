@@ -5,22 +5,25 @@ import pandas as pd
 
 script_folder = os.path.dirname(__file__)
 
-def process_folder(folder,csvfile,debug=0,overwrite=0):
+def process_folder(folder,csvfile,debug=0,overwrite=0,limit=-1):
     '''process htmls into a csv'''
     if os.path.exists(csvfile) and overwrite==0:       # if file already exists then skip it
         if debug: print('csv already exists')
         return
-    df = read_folder(folder,debug)      # process folder of htmls, return a df
+    df = read_folder(folder,debug,limit)      # process folder of htmls, return a df
     df.to_csv(csvfile, index=False)     
     if debug: print('create',csvfile)
 
-def read_folder(folder,debug=0):
+def read_folder(folder,debug=0,limit=-1):
     '''read through a folder of html files, outputting a dataframe'''
     df = pd.DataFrame([])
     for file in os.listdir(folder):                     # loop over all downloaded items
         temp_list = read_html(folder+file,debug)              # read each file, convert it to a list with beautiful soup
         temp_df = pd.DataFrame(temp_list)               # list to df
         df = df.append(temp_df)                         # append the new df to the main df
+        if limit == 1 : break
+        limit -=1
+        
     if debug:   
         print(len(df.index),'total books processed')
         print('first book is')
@@ -67,4 +70,6 @@ if __name__ == '__main__':
         script_folder + '\\books.csv',
         1,
         1,
+        1,
     )
+    
