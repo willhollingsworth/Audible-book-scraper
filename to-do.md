@@ -1,9 +1,13 @@
-Get additional information 
-    - narrator
-    - length
-    - release date
-    - if it's a series of books the name and number
+# To Do
+Auto determine page number
 
-Check each title to get additional details
-    - exact star rating(not rounded to nearest half star)
-    - categories (usually two)
+## Get additional fields(from main page)
+- narrator
+- length
+- release date
+- category (top of page)
+- if it's a series of books the name and number
+
+## Get additional fields(individual lookups per book)
+ - exact star rating(not rounded to nearest half star)
+ - categories (usually two)
