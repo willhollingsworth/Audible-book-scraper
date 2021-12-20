@@ -9,23 +9,30 @@ https://www.codementor.io/@aviaryan/downloading-files-from-urls-in-python-77q3bs
 
 script_folder = os.path.dirname(__file__)
 
-def download_html(list,folder,debug=0):
-    if not os.path.exists(folder):        # ensure downloads folder is created
-        os.mkdir(folder) 
+def download_html(categories, save_directory, debug=0):
+    if not os.path.exists(save_directory):  
+    for category in categories:      
+        content = download_pages(category, save_directory)
 
-    for x in list:         # loop over each category in at values
-        # print(x['url'])
-        for y in range(1,x['page_length']+1):   # load each page url, limit is manually set in varible page length
-            url = x['url']+str(y)               # add the page number to the url
-            file = x['filename'] + str(y) + '.html'
-            fullpath = folder + file
-            if os.path.exists(fullpath) :       # if file already exists then skip it
-                if debug:
-                    print(file,'already exists', end=', ')
-                continue
-            r = requests.get(url, allow_redirects=True) # download the page
-            with open(fullpath,'wb') as f:
-                f.write(r.content) # save the web page    
-            if debug:
-                print(file,'downloaded', end=', ')        
-
+def skip_download(path):
+    if os.path.exists(path) : return true
+        if debug:
+            print(path,'already exists', end=', ')
+    return false
+  
+def write_page(content, filename)            
+    with open(fullpath,'wb') as f:
+        f.write(content) # save the web page    
+    if debug:
+        print(filename,'downloaded', end=', ')        
+               
+def save_pages(category, save_directory):
+    number_of_pages = category['page_length']
+    for pageN in range(1, number_of_pages +1):   
+        page_filename = category['filename'] + str(pageN) + '.html'
+        filepath = os.path.join(save_directory, page_filename) # Using path join because the remembering the "/" in the right place is prone to breaking
+        if skip_download(filepath): continue  
+        url = category['url']+str(pageN)              
+        r = requests.get(url, allow_redirects=True)
+        write_page(r.content, filepath)
+    
