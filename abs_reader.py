@@ -45,11 +45,20 @@ def read_html(filename,debug=0):
         author = author.replace('By:','').strip()       # strip out characters
         dict['author'] = author
         
+        
+        narator = book.find(class_='narratorLabel')        # find the first item that matches that class
+        narator = list(narator.children)[1].text          # select the second child        
+        narator = narator.replace('Narrated By:','').strip()
+        dict['narator'] = narator
+        
         stars = book.find(string=lambda text: "out of 5 stars" in text.lower())          # find the field that contains specified characters
         dict['stars'] = stars.replace('out of 5 stars','')                      # strip chars
         
         rating = book.find(string=lambda text: "ratings" in text.lower())
-        rating = int(str(rating).split()[0].replace(',',''))            
+        if rating == None: 
+            rating = 0
+        else:
+            rating = int(str(rating).split()[0].replace(',',''))            
         dict['ratings'] = rating
         
         url = book.find('a',class_='bc-link')
@@ -65,11 +74,12 @@ def read_html(filename,debug=0):
 
 if __name__ == '__main__':
     ''' used for further debugging'''
-    process_folder(
-        script_folder + '\\downloads\\',
-        script_folder + '\\books.csv',
-        1,
-        1,
-        1,
-    )
-    
+    # process_folder(
+    #     script_folder + '\\downloads\\',
+    #     script_folder + '\\books.csv',
+    #     1,
+    #     1,
+    #     1,
+    # )
+    test = script_folder + '\\downloads\\' + 'bestsellers1.html'
+    print(read_html(test)[0])
