@@ -1,24 +1,25 @@
 import os
+from pathlib import Path
+
 from bs4 import BeautifulSoup
 import pandas as pd
-
-
-script_folder = os.path.dirname(__file__)
 
 def process_folder(folder,csvfile,debug=0,overwrite=0,limit=-1):
     '''process htmls into a csv'''
     if os.path.exists(csvfile) and overwrite==0:       # if file already exists then skip it
-        if debug: print('csv already exists')
+        if debug: 
+            print('csv already exists')
         return
     df = read_folder(folder,debug,limit)      # process folder of htmls, return a df
     df.to_csv(csvfile, index=False)     
-    if debug: print('create',csvfile)
+    if debug: 
+        print('create',csvfile)
 
 def read_folder(folder,debug=0,limit=-1):
     '''read through a folder of html files, outputting a dataframe'''
     df = pd.DataFrame([])
     for file in os.listdir(folder):                     # loop over all downloaded items
-        temp_list = read_html(folder+file,debug)              # read each file, convert it to a list with beautiful soup
+        temp_list = extract_books_from_html(folder+file,debug)              # read each file, convert it to a list with beautiful soup
         temp_df = pd.DataFrame(temp_list)               # list to df
         df = df.append(temp_df)                         # append the new df to the main df
         if limit == 1 : break
@@ -30,7 +31,7 @@ def read_folder(folder,debug=0,limit=-1):
         print(df.iloc[0])
     return df
 
-def read_html(filename,debug=0):
+def extract_books_from_html(filename,debug=0):
     '''audible html file -> book listing as dictionary items in a list'''
     soup = BeautifulSoup(open(filename, encoding='utf-8'), 'lxml')      # load the file
     books = soup.findAll('li',class_='productListItem')         # find all the book items on the page
@@ -74,12 +75,10 @@ def read_html(filename,debug=0):
 
 if __name__ == '__main__':
     ''' used for further debugging'''
-    # process_folder(
-    #     script_folder + '\\downloads\\',
-    #     script_folder + '\\books.csv',
-    #     1,
-    #     1,
-    #     1,
-    # )
-    test = script_folder + '\\downloads\\' + 'bestsellers1.html'
-    print(read_html(test)[0])
+    main_dir = Path.cwd().parents[0]
+    cache_folder = main_dir.joinpath('cache')
+    first_html_file = list(cache_folder.glob('*.html'))[0]
+    books = extract_books_from_html(first_html_file)
+    
+    # test = script_folder + '\\downloads\\' + 'bestsellers1.html'
+    # print(read_html(test)[0])
