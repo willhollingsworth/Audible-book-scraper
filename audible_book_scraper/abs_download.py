@@ -1,10 +1,14 @@
 import requests
 from pathlib import Path
 import os
+from urllib.parse import urlparse
 '''
-loop over each sale page, saving the content of the web page to disk
+Download functions
 
-https://www.codementor.io/@aviaryan/downloading-files-from-urls-in-python-77q3bs0un
+
+links
+https://docs.python.org/3/library/urllib.parse.html#module-urllib.parse
+https://realpython.com/python-pathlib/
 '''
 
 
@@ -15,14 +19,10 @@ def download_html(url,debug=0):
         main_dir = Path.cwd().parents[0]
     else:
         main_dir = Path.cwd()
-
-    full_folder_path = main_dir.joinpath(cache_folder)
-    print(full_folder_path)
-
-    if not os.path.exists(full_folder_path):        # ensure downloads folder is created
+    full_folder_path = main_dir.joinpath(cache_folder)     # join the cache folder to the path
+    if not os.path.exists(full_folder_path):        # ensure cache exists
         os.mkdir(full_folder_path) 
-
-    filename = 'test.html'
+    filename = urlparse(url).path.replace('/','_') + '.html'     # set filename based on url path
     full_path = full_folder_path.joinpath(filename)
     if os.path.exists(full_path) :       # if file already exists then skip it
         if debug:
@@ -35,6 +35,7 @@ def download_html(url,debug=0):
         print(filename,'downloaded', end=', ')        
 
 if __name__ == '__main__':
-    download_html('https://example.com/')
-    # print(Path.cwd())
-    # print(Path(__file__).parent)
+    import json
+    with open('../urls.json') as r:
+        pages_to_download = json.load(r)
+    download_html(pages_to_download[0]['url'], debug= 1)
