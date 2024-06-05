@@ -9,6 +9,7 @@ Download functions
 links
 https://docs.python.org/3/library/urllib.parse.html#module-urllib.parse
 https://realpython.com/python-pathlib/
+https://docs.python.org/3/library/pathlib.html
 '''
 
 
