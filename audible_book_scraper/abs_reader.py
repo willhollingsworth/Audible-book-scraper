@@ -73,12 +73,12 @@ def extract_books_from_html(filename,debug=0):
         print(len(book_list),'items processed')
     return book_list
 
+
 if __name__ == '__main__':
-    ''' used for further debugging'''
+    import utils
     main_dir = Path.cwd().parents[0]
     cache_folder = main_dir.joinpath('cache')
     first_html_file = list(cache_folder.glob('*.html'))[0]
-    books = extract_books_from_html(first_html_file)
-    
-    # test = script_folder + '\\downloads\\' + 'bestsellers1.html'
-    # print(read_html(test)[0])
+    test_xml_file = main_dir.joinpath('testing', 'test.xml')
+    utils.convert_html_to_xml(first_html_file,test_xml_file)
+    # books = extract_books_from_html(first_html_file)
