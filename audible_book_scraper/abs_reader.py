@@ -4,6 +4,8 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 import pandas as pd
 
+import utils
+
 def process_folder(folder,csvfile,debug=0,overwrite=0,limit=-1):
     '''process htmls into a csv'''
     if os.path.exists(csvfile) and overwrite==0:       # if file already exists then skip it
@@ -74,11 +76,14 @@ def extract_books_from_html(filename,debug=0):
     return book_list
 
 
-if __name__ == '__main__':
-    import utils
+def download_first_html_as_xml():
     main_dir = Path.cwd().parents[0]
     cache_folder = main_dir.joinpath('cache')
     first_html_file = list(cache_folder.glob('*.html'))[0]
-    test_xml_file = main_dir.joinpath('testing', 'test.xml')
+    xml_folder, xml_filename = 'testing', 'test.xml'
+    test_xml_file = main_dir.joinpath(xml_folder, xml_filename)
     utils.convert_html_to_xml(first_html_file,test_xml_file)
-    # books = extract_books_from_html(first_html_file)
+
+if __name__ == '__main__':
+    download_first_html_as_xml()
+
